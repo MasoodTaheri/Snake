@@ -6,10 +6,10 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Snake
 {
-    class SnakeController : ISnakeController
+    public class SnakeController : ISnakeController
     {
         private IInput _input;
-        public Vector3 Direction;
+        private Vector3 _direction;
         private LinkedList<Vector2Int> _snakeTail;
         private GridValue _headHit;
         private readonly int _freeCellsFrontOfSnake = 2;
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Snake
                     _snakeTail.AddLast(new Vector2Int(emptySpace.X + i + _freeCellsFrontOfSnake, emptySpace.Y));
                     board[emptySpace.X + i + _freeCellsFrontOfSnake, emptySpace.Y] = (int)GridValue.Snake;
                 }
-                Direction = direction;
+                _direction = direction;
             }
 
             return board;
@@ -61,50 +61,47 @@ namespace Assets.Scripts.Snake
                             allCellsAreEmpty = false;
                         }
                     }
-
                     if (allCellsAreEmpty)
                         yield return new Board.GridCell() { X = i, Y = j };
-
-
                 }
             }
         }
 
         private Vector3 GetDirection()
         {
-            if (Direction.x != 0f)
+            if (_direction.x != 0f)
             {
                 if (_input.GetKeyup())
                 {
-                    Direction = Vector3.forward;
+                    _direction = Vector3.forward;
                 }
                 else if (_input.GetKeyDown())
                 {
-                    Direction = Vector3.back;
+                    _direction = Vector3.back;
                 }
             }
 
-            else if (Direction.z != 0f)
+            else if (_direction.z != 0f)
             {
                 if (_input.GetKeyRight())
                 {
-                    Direction = Vector3.right;
+                    _direction = Vector3.right;
                 }
                 else if (_input.GetKeyLeft())
                 {
-                    Direction = Vector3.left;
+                    _direction = Vector3.left;
                 }
             }
 
-            return Direction;
+            return _direction;
         }
 
         public int[,] Move(int[,] board)
         {
 
-            Direction = GetDirection();
-            int headXPos = _snakeTail.First.Value.x + (int)Direction.x;
-            int headYPos = _snakeTail.First.Value.y + (int)Direction.z;
+            _direction = GetDirection();
+            int headXPos = _snakeTail.First.Value.x + (int)_direction.x;
+            int headYPos = _snakeTail.First.Value.y + (int)_direction.z;
 
             _headHit = (GridValue)board[headXPos, headYPos];
 
@@ -122,8 +119,6 @@ namespace Assets.Scripts.Snake
                 board[_snakeTail.First.Value.x, _snakeTail.First.Value.y] = (int)GridValue.Snake;
             }
 
-            //if (Input.GetKeyDown(KeyCode.Q))
-            //    Grow();
             return board;
         }
 

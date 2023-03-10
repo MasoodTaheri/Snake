@@ -26,19 +26,6 @@ namespace Assets.Scripts.Board
                     _boardCells[i, j].transform.SetParent(transform);
                 }
             }
-
-            for (int i = 0; i < _boardCells.GetLength(0); i++)
-            {
-                for (int j = 0; j < _boardCells.GetLength(1); j++)
-                {
-                    if (i == 0 || j == 0 || i == _boardCells.GetLength(0) - 1 || j == _boardCells.GetLength(1) - 1)
-                        board[i, j] = (int)GridValue.Wall;
-                    else
-                        board[i, j] = (int)GridValue.Empty;
-
-                }
-            }
-
             transform.position = new Vector3(-1 * board.GetLength(0) / 2.0f, 0, -1 * board.GetLength(1) / 2.0f);
         }
 

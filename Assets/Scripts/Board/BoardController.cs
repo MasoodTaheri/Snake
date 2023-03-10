@@ -11,13 +11,8 @@ namespace Assets.Scripts.Board
     public class BoardController : IBoardController
     {
         public int[,] Board { get; set; }
-        private readonly int _defaultCellValue = (int)GridValue.Empty;
-        private readonly IBoardRenderer _renderer;
+        //private readonly int _defaultCellValue = (int)GridValue.Empty;
 
-        public BoardController(IBoardRenderer renderer)
-        {
-            _renderer = renderer;
-        }
 
         public void Initialize(int width, int height)
         {
@@ -26,18 +21,19 @@ namespace Assets.Scripts.Board
             {
                 for (int j = 0; j < Board.GetLength(1); j++)
                 {
-                    Board[i, j] = _defaultCellValue;
+                    //Board[i, j] = _defaultCellValue;
+                    if (i == 0 || j == 0 || i == Board.GetLength(0) - 1 || j == Board.GetLength(1) - 1)
+                        Board[i, j] = (int)GridValue.Wall;
+                    else
+                        Board[i, j] = (int)GridValue.Empty;
                 }
             }
 
-            _renderer.Initialize(Board);
+  
         }
 
 
-        public void UpdateBoardView()
-        {
-            _renderer.Draw(Board);
-        }
+
 
         public void MakeNewFood()
         {

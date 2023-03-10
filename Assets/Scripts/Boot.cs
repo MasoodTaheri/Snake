@@ -14,13 +14,17 @@ namespace Assets.Scripts
         private IBoardController _boardController;
         private List<ISnakeController> _snakeControllers;
         private int _snakeSize = 4;
+        private int _boardWidth=20;
+        private int _boardHeight=20;
         void Start()
         {
-            _boardController = new BoardController(_renderer);
-            _boardController.Initialize(20, 20);
-            _renderer.Draw(_boardController.Board);
-            _snakeControllers = new List<ISnakeController>();
+            _boardController = new BoardController();
+            _boardController.Initialize(_boardWidth, _boardHeight);
 
+            _renderer.Initialize(_boardController.Board);
+            _renderer.Draw(_boardController.Board);
+
+            _snakeControllers = new List<ISnakeController>();
             IInput input = new HumanInput();
             AddNewSnake(input);
 
@@ -67,7 +71,7 @@ namespace Assets.Scripts
                         _boardController.MakeNewFood();
                     }
                 }
-                _boardController.UpdateBoardView();
+                _renderer.Draw(_boardController.Board);
             }
 
             Debug.Log("finish game");
